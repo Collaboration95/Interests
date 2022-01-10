@@ -11,17 +11,24 @@ MainInputFieldID = "inputfield"
 TargetWebpage = "https://10fastfingers.com/typing-test/english"
 ClassNameForWords = "highlight"
 
+def Choose_Options():
+    # Returns user choice 
+    return input("Enter 1 to Start the program , 0 to exit")
+
 
 def Main()->None:
     # This function gets called 
-    AutoWriterCode()
+    if (Choose_Options()):
+        AutoWriterCode()
+    else:
+        print("Have a non-consequential day !")
+
 
 def FindWaitTimeWord(DesiredSpeed:int)->float:
     # This function's goal is to find the wait time after each word so that  the program will be able to regulate speed
-    m = 552
-    delay = 1
-    d  = DesiredSpeed 
-    timewait = (((1-d/m)/d)*60) -6.6/100
+    m = 552 #The max speed that the code can generate without any time delay is 552wpm 
+    d  = DesiredSpeed
+    timewait = (((1-d/m)/d)*60) -6.6/100 #Calculating time wait per word
     return float(timewait)
 
 
@@ -29,19 +36,22 @@ def AutoWriterCode():
     # This is the function performs the essential prominant part of the code 
     driver = webdriver.Chrome(executable_path=ExecutablePath)
     driver.get(TargetWebpage)
-    time.sleep(2)
+    time.sleep(2) #Waiting for the cookie thing to load
     # Allowing Cookie Collection
-    CookieButton  = driver.find_element(By.ID,CookieButtonId)
-    CookieButton.click()
-
+    try: 
+        CookieButton  = driver.find_element(By.ID,CookieButtonId)
+        CookieButton.click()
+    except:
+        print("Cookie thing did not load / some genius put the window in fullscreen that somehow messes with the cookie button id")
+        print("\n Oh Well !")
     InputField = driver.find_element(By.ID,MainInputFieldID)
-    # for i in range(282):
-    time.sleep(10)
+    
+    time.sleep(10) #Waiting for the add stuff to load in , this wastes time since my hotfix methods ask for the word each time 
 
     timewaitword = FindWaitTimeWord(int(input("Please Enter your desired wpm")))
 
     StartOffTime = time.time()
-    while ((time.time()-StartOffTime)<61):
+    while ((time.time()-StartOffTime)<61): #Checks if 60 seconds has passed before cutting out the code
         A = driver.find_element(By.CLASS_NAME,ClassNameForWords)
         TempWord = (A.text)
         InputField.send_keys(TempWord)
@@ -49,6 +59,5 @@ def AutoWriterCode():
         time.sleep(timewaitword)
     time.sleep(10)
 
-while True:
 
-    Main()
+Main()
