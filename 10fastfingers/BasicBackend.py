@@ -1,3 +1,4 @@
+from os import initgroups
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -10,50 +11,44 @@ MainInputFieldID = "inputfield"
 TargetWebpage = "https://10fastfingers.com/typing-test/english"
 ClassNameForWords = "highlight"
 
+
 def Main()->None:
+    # This function gets called 
     AutoWriterCode()
 
+def FindWaitTimeWord(DesiredSpeed:int)->float:
+    # This function's goal is to find the wait time after each word so that  the program will be able to regulate speed
+    m = 552
+    delay = 1
+    d  = DesiredSpeed 
+    timewait = (((1-d/m)/d)*60) -6.6/100
+    return float(timewait)
+
+
 def AutoWriterCode():
-    # This is the function performs the essential 
+    # This is the function performs the essential prominant part of the code 
     driver = webdriver.Chrome(executable_path=ExecutablePath)
     driver.get(TargetWebpage)
-    time.sleep(4)
+    time.sleep(2)
     # Allowing Cookie Collection
     CookieButton  = driver.find_element(By.ID,CookieButtonId)
     CookieButton.click()
 
     InputField = driver.find_element(By.ID,MainInputFieldID)
     # for i in range(282):
-    time.sleep(2)
+    time.sleep(10)
 
-    while True:
-        try:
-            A = driver.find_element(By.CLASS_NAME,ClassNameForWords)
-            InputField.send_keys(A.text+Keys.SPACE)
-        except:
-            timer =  ((driver.find_element(By.ID,"timer")).text)[2:]
-            print("Going to sleep for {} seconds".format(timer))
-            time.sleep(int(timer))
+    timewaitword = FindWaitTimeWord(int(input("Please Enter your desired wpm")))
 
-            wpm = driver.find_element(By.ID,"wpm")
-            print(wpm.text)
-            accuracy = driver.find_element(By.ID,"accuracy")
-            print(accuracy.text)
-            driver.close()
-            break
-            pass
-        # K = [x for x in A.text]
-        # A = A.text.split("")
-        # for j in K:
-        #     InputField.send_keys(j)
-        
-    
+    StartOffTime = time.time()
+    while ((time.time()-StartOffTime)<61):
+        A = driver.find_element(By.CLASS_NAME,ClassNameForWords)
+        TempWord = (A.text)
+        InputField.send_keys(TempWord)
+        InputField.send_keys(Keys.SPACE)
+        time.sleep(timewaitword)
+    time.sleep(10)
 
-        # InputField.send_keys(Keys.SPACE)
-        
+while True:
 
-
-
-
-
-Main()
+    Main()
