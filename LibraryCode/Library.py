@@ -1,4 +1,5 @@
 #Importing all the headerfiles that i need 
+from typing import Dict
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import time
@@ -15,9 +16,9 @@ DefaultEmail = "guruprasath_gopal@mymail.sutd.edu.sg"
 DefaultTime = "1800"
 TargetWebsiteUrl = "https://mylibrary.sutd.edu.sg/roombooking"
 FinalTargetString = "https://mylibrary.sutd.edu.sg/reservation/add/user/"
-
 #Executable path for the chromedriver 
 ExecutablePath = "/Users/speedpowermac/Documents/projects/CODE_MAIN/chromedriver" 
+Options = {1:"Reservation", 2:"exit"}
 
 def LoadDefault()->None:
     # Loads the default user info into a dict
@@ -29,9 +30,31 @@ def LoadDefault()->None:
     Dict_Info.append(Temp_Dict.copy())
     return None
 
+def ShowAndGetOptions(OptionsDict:dict):
+    for key in OptionsDict:
+        print("{}. {}".format(key,OptionsDict[key]))
+    
+    Option = int(input("Please enter your option"))
+    if Option in OptionsDict.keys():
+        return Option
+    else:
+        ShowAndGetOptions(Options)
+
+def Routing_function(N:int)->None:
+    # This function is to route the functions and the correct options 
+    if N==1:
+        MainFunction()
+    # elif N==3:
+        # IamWastingTime()
+    elif N==2:
+        exit("Thank You for using the bot ")
+
+
 def MainFunction():
+    ShowAndGetOptions(Options)
     SeatNo = Find_Seat_Number()
     TimeNo = Find_Time()
+    LoadDefault()
     Fill_Stuff_In(FinalTargetString + SeatNo +"/" + TimeNo)
 
 def Fill_Stuff_In(Link:str):
@@ -46,21 +69,21 @@ def Fill_Stuff_In(Link:str):
     # Sets the name of the user
     Set_Name = driver.find_element(By.NAME,"field_reservation_contact_name[und][0][value]")
     Set_Name.click()
-    Set_Name.send_keys("GuruPrasath Gopal")
+    Set_Name.send_keys(Dict_Info[0]["Name"])
 
     # Sets the phone number of the user 
     Set_Number = driver.find_element(By.NAME,"field_reservation_contact_phone[und][0][value]")
     Set_Number.click()
-    Set_Number.send_keys("87416283")
+    Set_Number.send_keys(Dict_Info[0]["PhoneNumber"])
 
     # Sets the email of the user
     Set_Email = driver.find_element(By.NAME,"field_reservation_contact_email[und][0][email]")
     Set_Email.click()
-    Set_Email.send_keys("guruprasath_gopal@mymail.sutd.edu.sg")
+    Set_Email.send_keys(Dict_Info[0]["Email"])
     
     # Sets the Duration of the slot (currently at 30 mins or 1800 seconds)
     Set_Duration = DropDown(driver.find_element(By.NAME,"duration"))
-    Set_Duration.select_by_value("1800")
+    Set_Duration.select_by_value(Dict_Info[0]["Time"])
     
     # Finds the captcha by the class name and gets the digits and performs simple addition and fills it in the field
     element = driver.find_element(By.CLASS_NAME,"field-prefix")
@@ -92,9 +115,8 @@ def Find_Time()->str:
     except:
         print("\n Oops there seems to be some error , please try again \n")
         Find_Time()
-
     
-    if (TempReturnValue < time.time()):
+    if (float(TempReturnValue) < time.time()):
         print("\n Oops Please Enter again \n")
         Find_Time()
     
@@ -120,10 +142,18 @@ def Get_Seat():
 
 def Get_Seat_Number(StName:str)->int:
 
+    with open ("throwaway3.txt","r") as f:
+        TempContent = f.readlines()
+    TempContent = [x.strip("\n") for x in TempContent]
+    
+    for i in range(len(TempContent)):
+        TempSeatString = TempContent[i][:len(TempContent[i])-4]
+        TempSeatNumber = TempContent[i][len(TempContent[i])-3:]
 
-    # Function to convert seat name to seat number
-    if StName !="":
-        return 232
+        if (TempSeatString == StName):
+            return TempSeatNumber
 
-print(MainFunction())
+    print("Looks Like the inputed string is wrong")    
+    Find_Seat_Number()
 
+MainFunction()
