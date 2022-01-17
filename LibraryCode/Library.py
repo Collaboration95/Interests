@@ -69,7 +69,6 @@ def MainFunction():
     Fill_Stuff_In(FinalTargetString + SeatNo +"/" + TimeNo)
 
 
-
 def UserProfile()->int:
     ShowAndGetOptions(Dict_Info)
     pass
@@ -126,7 +125,7 @@ def Find_Time()->str:
     # them with a space in between and calls the epoch time function
     Date = input("Date in dd.mm.yyyy format")
     Time = input("time hh:mm:ss formats")
-    print(Date + " " + Time)
+  
     TempReturnValue = Epoch_Time(Date+" "+Time)
 
     if (float(TempReturnValue) < time.time()):
@@ -140,13 +139,12 @@ def Epoch_Time(Time_String) ->str:
     # Converts the given time in "dd.mm.yyy hh:mm:ss" into epoch time 
     Converted_Time = time.mktime(time.strptime(Time_String, "%d.%m.%Y %H:%M:%S"))
 
-    
     if (CheckTime(Time_String,Converted_Time)):
         return str(int(Converted_Time))
     else:
-        print(Converted_Time)
-        print(CorrectConvertedTime(Converted_Time))
-        return CorrectConvertedTime(Converted_Time)
+        # print(f"Your inital time{Converted_Time}")
+        # print(CorrectConvertedTime(Converted_Time))
+        return str(int(CorrectConvertedTime(Converted_Time)))
         
 def CorrectConvertedTime(Converted_Time):
     # Approximates time to nearest 30minute slot
@@ -163,6 +161,18 @@ def CheckTime(Time_String:str,Converted_Time):
         return True
     return False
 
+def CheckTimeConstraints(UnixTime:float):
+    # This function checks whether the entered time is inside the time constrains of the library operatiing hours
+   
+    OpeningTime = 28800
+    ClosingTime = 63000
+    HoursTime = ((UnixTime - 8*3600)%86400) + 8*3600
+    if (HoursTime>OpeningTime and HoursTime<ClosingTime):
+        return None
+    else:
+        print("Oops looks like the library is closed during that time , please try again\n")
+        # Find()
+
 def Find_Seat_Number():
     # Converts Seat input  into Seatnumber
     # This line calls a dummy function currently to convert seat name to seatnumber
@@ -171,8 +181,20 @@ def Find_Seat_Number():
     return  str(SeatNumber)
 
 def Get_Seat():
+    if (input("Enter 1 if you want to see seat options")):
+        ShowSeatNames()
+
     SeatName = input("Give me the seat number")
     return SeatName
+
+def ShowSeatNames():
+    with open("throwaway.txt","r") as f:
+        A = f.readlines()
+    TempList = [x.split(" ") for x in A]
+    Seat_Options  = [(x[0]+" "+x[1]) for x in TempList]
+    for x in Seat_Options:
+        print(x)
+
 
 def Get_Seat_Number(StName:str)->int:
     # Compares a txt file and converts seat name into seat number
