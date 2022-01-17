@@ -50,6 +50,7 @@ def ShowAndGetOptionsList(ListyList:list):
         return Option
     else:
         ShowAndGetOptions(Options)
+
 def Routing_function(N:int)->None:
     # This function is to route the functions and the correct options 
     if N==1:
@@ -67,7 +68,6 @@ def MainFunction():
     TimeNo = Find_Time()
     LoadDefault()
     Fill_Stuff_In(FinalTargetString + SeatNo +"/" + TimeNo)
-
 
 def UserProfile()->int:
     ShowAndGetOptions(Dict_Info)
@@ -120,6 +120,49 @@ def Find_User_Info():
     Temp_Dict_Info["Time"]  = (input("Enter Time in seconds"))
     Dict_Info.append(Temp_Dict_Info.copy())
 
+#+++++++++++++++++ Seat Related Function +++++++++++++++
+
+def Find_Seat_Number():
+    # Converts Seat input  into Seatnumber
+    # This line calls a dummy function currently to convert seat name to seatnumber
+    SeatNumber = Get_Seat_Number(Get_Seat())
+
+    return  str(SeatNumber)
+
+def Get_Seat():
+    if (input("Enter 1 if you want to see seat options")):
+        ShowSeatNames()
+
+    SeatName = input("Give me the seat number")
+    return SeatName
+
+def ShowSeatNames():
+    with open("throwaway.txt","r") as f:
+        A = f.readlines()
+    TempList = [x.split(" ") for x in A]
+    Seat_Options  = [(x[0]+" "+x[1]) for x in TempList]
+    for x in Seat_Options:
+        print(x)
+
+def Get_Seat_Number(StName:str)->int:
+    # Compares a txt file and converts seat name into seat number
+    with open ("throwaway3.txt","r") as f:
+        TempContent = f.readlines()
+    TempContent = [x.strip("\n") for x in TempContent]
+    
+    # Runs through the txt file if a reference is found  , it prints that
+    for i in range(len(TempContent)):
+        TempSeatString = TempContent[i][:len(TempContent[i])-4]
+        TempSeatNumber = TempContent[i][len(TempContent[i])-3:]
+
+        if (TempSeatString == StName):
+            return TempSeatNumber
+
+    print("Looks Like the inputed string is wrong")    
+    Find_Seat_Number()
+
+#=============== Time Related Functions ==================
+
 def Find_Time()->str:
     # Asks the user for input in "dd.mm.yyy" , "hh:mm:ss" format and concatenates 
     # them with a space in between and calls the epoch time function
@@ -133,7 +176,6 @@ def Find_Time()->str:
         Find_Time()
     
     return Epoch_Time(Date+" "+Time)
-    # "29.08.2011 11:05:02"
 
 def Epoch_Time(Time_String) ->str:
     # Converts the given time in "dd.mm.yyy hh:mm:ss" into epoch time 
@@ -171,47 +213,6 @@ def CheckTimeConstraints(UnixTime:float):
         return None
     else:
         print("Oops looks like the library is closed during that time , please try again\n")
-        # Find()
-
-def Find_Seat_Number():
-    # Converts Seat input  into Seatnumber
-    # This line calls a dummy function currently to convert seat name to seatnumber
-    SeatNumber = Get_Seat_Number(Get_Seat())
-
-    return  str(SeatNumber)
-
-def Get_Seat():
-    if (input("Enter 1 if you want to see seat options")):
-        ShowSeatNames()
-
-    SeatName = input("Give me the seat number")
-    return SeatName
-
-def ShowSeatNames():
-    with open("throwaway.txt","r") as f:
-        A = f.readlines()
-    TempList = [x.split(" ") for x in A]
-    Seat_Options  = [(x[0]+" "+x[1]) for x in TempList]
-    for x in Seat_Options:
-        print(x)
-
-
-def Get_Seat_Number(StName:str)->int:
-    # Compares a txt file and converts seat name into seat number
-    with open ("throwaway3.txt","r") as f:
-        TempContent = f.readlines()
-    TempContent = [x.strip("\n") for x in TempContent]
-    
-    # Runs through the txt file if a reference is found  , it prints that
-    for i in range(len(TempContent)):
-        TempSeatString = TempContent[i][:len(TempContent[i])-4]
-        TempSeatNumber = TempContent[i][len(TempContent[i])-3:]
-
-        if (TempSeatString == StName):
-            return TempSeatNumber
-
-    print("Looks Like the inputed string is wrong")    
-    Find_Seat_Number()
 
 MainFunction()
  
