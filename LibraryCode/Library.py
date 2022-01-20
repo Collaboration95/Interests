@@ -1,6 +1,5 @@
 #Importing all the headerfiles that i need 
 import time
-from typing import Dict, List
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -16,7 +15,7 @@ TargetWebsiteUrl = "https://mylibrary.sutd.edu.sg/roombooking"
 FinalTargetString = "https://mylibrary.sutd.edu.sg/reservation/add/user/"
 #Executable path for the chromedriver 
 ExecutablePath = "/Users/speedpowermac/Documents/projects/CODE_MAIN/chromedriver" 
-Options = {1:"Make a Slot Booking", 2:"exit"}
+Options = {1:"Make a Slot Booking",2:"Try AnotherMethod", 3:"exit"}
 
 def LoadDefault()->None:
     # Loads the default user info into a dict
@@ -32,9 +31,13 @@ def ShowAndGetOptions(OptionsDict:dict):
     for key in OptionsDict:
         print("{}. {}".format(key,OptionsDict[key]))
     
-    Option = int(input("Please enter your option"))
+    try:
+        Option = int(input("\nPlease enter your option :"))
+    except:
+        print("\nPlease Enter a valid option\n")
+        ShowAndGetOptions(Options)
     if Option in OptionsDict.keys():
-        return Option
+        return Routing_function(Option)
     else:
         ShowAndGetOptions(Options)
 
@@ -55,15 +58,19 @@ def Routing_function(N:int)->None:
     # This function is to route the functions and the correct options 
     if N==1:
         MainFunction()
-    # elif N==3:
-        # IamWastingTime()
     elif N==2:
+        AnotherMethod()
+    elif N==3:
         exit("Thank You for using the bot ")
+
+def DefaultMainFunction():
+    # Just a base function since i found out some redundancy existed.
+    ShowAndGetOptions(Options)
+
 
 def MainFunction():
     # Shows the options available and gets input and gets time 
     # and seat info and calls the function to fill up userinfo in the website
-    ShowAndGetOptions(Options)
     SeatNo = Find_Seat_Number()
     TimeNo = Find_Time()
     LoadDefault()
@@ -130,7 +137,7 @@ def Find_Seat_Number():
     return  str(SeatNumber)
 
 def Get_Seat():
-    if (input("Enter 1 if you want to see seat options")):
+    if (input("Please  Enter Any key  if you want to see seat options")!=""):
         ShowSeatNames()
 
     SeatName = input("Give me the seat number")
@@ -158,7 +165,7 @@ def Get_Seat_Number(StName:str)->int:
         if (TempSeatString == StName):
             return TempSeatNumber
 
-    print("Looks Like the inputed string is wrong")    
+    print("\nLooks Like the inputed string is wrong\n")    
     Find_Seat_Number()
 
 #=============== Time Related Functions ==================
@@ -214,5 +221,32 @@ def CheckTimeConstraints(UnixTime:float):
     else:
         print("Oops looks like the library is closed during that time , please try again\n")
 
-MainFunction()
+# Another Method
+
+
+def AnotherMethod():
+    TargetWebsiteUrl = "https://mylibrary.sutd.edu.sg/"
+    # TargetWebsiteUrl1 = "https://mylibrary.sutd.edu.sg/availability/232/2022-01-20"
+
+    
+   
+    SeatNo = Find_Seat_Number()
+    Date = Modified_Find_Time()
+    driver1= webdriver.Chrome(executable_path=ExecutablePath)
+    driver1.get(TargetWebsiteUrl +"availability/"+str(SeatNo)+"/"+str(Date))
+
+def Modified_Find_Time():
+    # This function has been modified to get input date and check if its in the future/present day
+    Date = input("Enter Date in dd.mm.yyyy format")
+    TempReturnValue = Modified_Epoch_Time(Date)
+    return TempReturnValue    
+    pass
+
+def Modified_Epoch_Time(Time_String) ->str:
+    # Converts the given time in "dd.mm.yyy hh:mm:ss" into epoch time 
+    Converted_Time = time.mktime(time.strptime(Time_String, "%d.%m.%Y"))
+
+    return str(int(Converted_Time))
+ 
+DefaultMainFunction()
  
