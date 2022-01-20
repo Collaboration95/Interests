@@ -227,26 +227,20 @@ def CheckTimeConstraints(UnixTime:float):
 def AnotherMethod():
     TargetWebsiteUrl = "https://mylibrary.sutd.edu.sg/"
     # TargetWebsiteUrl1 = "https://mylibrary.sutd.edu.sg/availability/232/2022-01-20"
-
-    
    
     SeatNo = Find_Seat_Number()
-    Date = Modified_Find_Time()
+    # Date = Modified_Find_Time()
+    Date = input("Enter Date in yyyy-mm-dd")
+
     driver1= webdriver.Chrome(executable_path=ExecutablePath)
     driver1.get(TargetWebsiteUrl +"availability/"+str(SeatNo)+"/"+str(Date))
 
-def Modified_Find_Time():
-    # This function has been modified to get input date and check if its in the future/present day
-    Date = input("Enter Date in dd.mm.yyyy format")
-    TempReturnValue = Modified_Epoch_Time(Date)
-    return TempReturnValue    
-    pass
+    # GettingBookedTimeSlots
+    BookedTimeSlots = driver1.find_elements_by_class_name("book-time-columns book-time-unavailable")
+    # BookedTimeSlots = driver1.find_elements(By.CLASS_NAME,"book-time-columns book-time-unavailable")
+    # [print(x.text) for x in BookedTimeSlots]
+    print(len(BookedTimeSlots))
 
-def Modified_Epoch_Time(Time_String) ->str:
-    # Converts the given time in "dd.mm.yyy hh:mm:ss" into epoch time 
-    Converted_Time = time.mktime(time.strptime(Time_String, "%d.%m.%Y"))
 
-    return str(int(Converted_Time))
- 
 DefaultMainFunction()
  
