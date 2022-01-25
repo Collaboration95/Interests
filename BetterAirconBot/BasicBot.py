@@ -32,8 +32,6 @@ def Routing_function(N:int)->None:
     elif N==3:
         exit("Thank You for using the bot ")
 
-
-
 def IamWastingTime():
     # I am wasting time 
     password = 0
@@ -42,7 +40,7 @@ def IamWastingTime():
         password = input("Please Input password :")
     
     
-    with open ("BetterAirconBot/Balance.txt","r") as f:
+    with open ("Balance.txt","r") as f:
         TempContent = f.readlines()
     
     TempContent = [x.strip("\n") for x in TempContent ]
@@ -53,7 +51,7 @@ def IamWastingTime():
         Content["UnixTime"] = TempContent1[0]
         Content["NormalTime"] = TempContent1[1] 
         Content["Balance"] = TempContent1[2]
-        Content["Hashed"] = TempContent1[3]
+        Conment["Hashed"] = TempContent1[3]
         FinalContent.append(Content.copy())
 
 
@@ -97,7 +95,7 @@ def Login_Setup():
     UnixTime = Epoch_Time(element1.text)
 
     FloatBalance = float(Balance[18:])
-    print("The Remaining Balance is {}".format(FloatBalance))
+    print("The Remaining Balance is ${}".format(FloatBalance))
     NormalTime = re.sub(' ','|',element1.text)
     
     
@@ -109,7 +107,7 @@ def Login_Setup():
 
 def WriteData(UnixTime,NormalTime,Balance:float,HashedName):
     # This function writes the current time and 
-    with open ("BetterAirconBot/Balance.txt","a") as f:
+    with open ("Balance.txt","a") as f:
         f.write("{} {} {} {}".format(UnixTime,NormalTime,Balance,HashedName))
         f.write("\n")
 
