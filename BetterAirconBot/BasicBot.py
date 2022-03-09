@@ -13,7 +13,7 @@ Options  = {1:"Login",2:"DummyFunction",3:"exit"}
 
 ExecutablePath = "/Users/speedpowermac/Documents/projects/CODE_MAIN/chromedriver"
 
-def ShowAndGetOptions(OptionsDict:dict):
+def ShowAndGetOptions(OptionsDict:dict)->int:
     for key in OptionsDict:
         print("{}. {}".format(key,OptionsDict[key]))
     
@@ -36,10 +36,13 @@ def IamWastingTime():
     # I am wasting time 
     password = 0
 
-    while (password!=95141):
+    while True:
         password = input("Please Input password :")
-    
-    
+        if password ==95141:
+            break
+        else:
+            continue
+        
     with open ("Balance.txt","r") as f:
         TempContent = f.readlines()
     
@@ -51,14 +54,13 @@ def IamWastingTime():
         Content["UnixTime"] = TempContent1[0]
         Content["NormalTime"] = TempContent1[1] 
         Content["Balance"] = TempContent1[2]
-        Conment["Hashed"] = TempContent1[3]
+        Content["Hashed"] = TempContent1[3]
         FinalContent.append(Content.copy())
 
 
 def Login_Setup():
-
-
-    if(input("Press Enter if you want to use defualt")!=""):
+    #this function is used to setup Userinfo and enter it
+    if(input("Press Enter if you want to use default")!=""):
         UserName = input("Input UserName :")
         PassWord = input("Input Password :")
     else:
@@ -98,9 +100,8 @@ def Login_Setup():
     print("The Remaining Balance is ${}".format(FloatBalance))
     NormalTime = re.sub(' ','|',element1.text)
     
-    
-
-    WriteData(UnixTime,NormalTime,FloatBalance,Sha256Hashing(UserName)) #Calls a function to write info into a text file      
+    WriteData(UnixTime,NormalTime,FloatBalance,Sha256Hashing(UserName)) 
+    #Calls a function to write info into a text file      
     
     time.sleep(3)
     driver.close()
@@ -120,8 +121,7 @@ def Epoch_Time(Time_String) ->str:
     Converted_Time = time.mktime(time.strptime(Time_String, "%d/%m/%Y %H:%M:%S"))
     return str(int(Converted_Time))
 
-
-def MainFunction():
+def MainFunction()->None:
     # This is the first function that is called when the program is executed
     Routing_function(ShowAndGetOptions(Options))
 
