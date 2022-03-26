@@ -2,6 +2,7 @@ from selenium import webdriver
 import re,time , hashlib
 # from selenium.webdriver.android.webdriver import WebDriver
 from selenium.webdriver.common.by import By
+import matplotlib.pyplot as plt
 
 # Variables required
 UserName = "20000486"
@@ -9,7 +10,7 @@ PassWord = "Aircon0469"
 LoginButton = "btnLogin"
 LoginIdName = "txtLoginId"
 PasswordName = "txtPassword"
-Options  = {1:"Login",2:"DummyFunction",3:"exit"}
+Options  = {1:"Login",2:"DummyFunction",3:"Gime A Chart",4:"exit"}
 
 ExecutablePath = "/Users/speedpowermac/Documents/projects/CODE_MAIN/chromedriver"
 
@@ -23,6 +24,56 @@ def ShowAndGetOptions(OptionsDict:dict)->int:
     else:
         ShowAndGetOptions(Options)
 
+
+def Chartfunction():
+    with open("Balance.txt","r") as f:
+        TempContent = f.readlines()
+
+    TempContent = [x.strip("\n") for x in TempContent ]
+    temp2 = []
+    for i in range(len(TempContent)):
+        A  = TempContent[i].split(" ")
+        temp2.append(A[3])
+    if len(set(list(temp2)))==1:
+        print("Chart Coming right up")
+        ChartItUp(temp2[0])
+
+    else: 
+        print("Code under construction")
+        
+
+def ChartItUp(B:str):
+    with open("Balance.txt","r") as f:
+        TempContent = f.readlines()
+
+    TempContent = [x.strip("\n") for x in TempContent ]
+    temp2 = []
+    for i in range(len(TempContent)):
+        A  = TempContent[i].split(" ")
+        
+    temp1= list(set(temp2))[0]
+    print(A)
+
+
+    
+
+    
+    # plt.plot(x, y)
+ 
+    #    naming the x axis
+    plt.xlabel('x - axis')
+    # naming the y axis
+    plt.ylabel('y - axis')
+ 
+    # giving a title to my graph
+    plt.title('My first graph!')
+ 
+    # function to show the plot
+    # plt.show()
+
+    
+    pass
+
 def Routing_function(N:int)->None:
     # This function is to route the functions and the correct options 
     if N==1:
@@ -30,16 +81,23 @@ def Routing_function(N:int)->None:
     elif N==2:
         IamWastingTime()
     elif N==3:
+        print("Here we go again!")
+        Chartfunction()
+        
+    elif N==4:
         exit("Thank You for using the bot ")
+
 
 def IamWastingTime():
     # I am wasting time 
     password = 0
 
     while True:
-        password = input("Please Input password :")
-        if password ==95141:
+        password = int(input("Please Input password :"))
+        if password == 95141:
+            print("HI How are you ")
             break
+
         else:
             continue
         
@@ -57,15 +115,24 @@ def IamWastingTime():
         Content["Hashed"] = TempContent1[3]
         FinalContent.append(Content.copy())
 
-
-def Login_Setup():
-    #this function is used to setup Userinfo and enter it
-    if(input("Press Enter if you want to use default")!=""):
-        UserName = input("Input UserName :")
+def Credentials_Checker():
+    # Accepts input of credentials and checks them 
+    if(input("Press Enter if you want to use default profile")!=""):
+        UserName=input("Input Username :")
         PassWord = input("Input Password :")
     else:
         UserName = "20000486"
         PassWord = "Aircon0469"
+
+    return (UserName,PassWord)
+    pass
+
+
+def Login_Setup():
+    #this function is used to setup Userinfo and enter it
+
+    UserName,PassWord = Credentials_Checker()
+
     driver= webdriver.Chrome(executable_path=ExecutablePath)
     driver.get("https://nus-utown.evs.com.sg/SUTD/")
     driver.switch_to.frame("leftFrame")
