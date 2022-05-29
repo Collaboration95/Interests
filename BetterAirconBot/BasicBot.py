@@ -1,10 +1,10 @@
 from selenium import webdriver
 import re,time , hashlib
-# from selenium.webdriver.android.webdriver import WebDriver
+
 from selenium.webdriver.common.by import By
 import matplotlib.pyplot as plt
 
-# Variables required
+#Required Variables
 UserName = "20000486"
 PassWord = "Aircon0469"
 LoginButton = "btnLogin"
@@ -48,31 +48,25 @@ def ChartItUp(B:str):
 
     TempContent = [x.strip("\n") for x in TempContent ]
     temp2 = []
+    AnotherTemp = []
     for i in range(len(TempContent)):
+
         A  = TempContent[i].split(" ")
-        
-    temp1= list(set(temp2))[0]
-    print(A)
+        if A[3] == B:
+            AnotherTemp.append(TempContent[i])
+    print(AnotherTemp)
 
+    Epochtime = [int(x.split(" ")[0]) for x in AnotherTemp]
+    Epochtime = [x-Epochtime[0] for x in Epochtime]
+    Epochtime = list(set(Epochtime))
+    Epochtime.sort()
+    print(Epochtime)
 
-    
-
-    
-    # plt.plot(x, y)
- 
-    #    naming the x axis
-    plt.xlabel('x - axis')
-    # naming the y axis
-    plt.ylabel('y - axis')
- 
-    # giving a title to my graph
-    plt.title('My first graph!')
- 
+    # plt.xlabel('x - axis')
+    # plt.ylabel('y - axis')
+    # plt.title('My first graph!')
     # function to show the plot
     # plt.show()
-
-    
-    pass
 
 def Routing_function(N:int)->None:
     # This function is to route the functions and the correct options 
