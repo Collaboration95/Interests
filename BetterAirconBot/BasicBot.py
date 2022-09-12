@@ -5,8 +5,8 @@ from selenium.webdriver.common.by import By
 import matplotlib.pyplot as plt
 
 #Required Variables
-UserName = "20000486"
-PassWord = "Aircon0469"
+UserName = "20000358"
+PassWord = "tD0358Su"
 LoginButton = "btnLogin"
 LoginIdName = "txtLoginId"
 PasswordName = "txtPassword"
