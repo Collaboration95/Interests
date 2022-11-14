@@ -37,7 +37,7 @@ def Brains(Title:str)->None:
     params = {
     "action": "query",
     "format": "json",
-    2: Title,
+    "titles": Title,
     "prop": "links",
     "pllimit": "max"
     }
@@ -107,7 +107,10 @@ def Show_And_Get_Options(Current_Options:dict)->int:
 options =   {1:"Make a new Request",2:"exit"}
 
 def Starter():
-    Routing_function(Show_And_Get_Options(options))
+    i = Show_And_Get_Options(options)
+
+    print(i)
+    Routing_function(i)
 
 
 

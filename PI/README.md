@@ -1,4 +1,6 @@
 # PI Memoriser
+This program is to help you in your tiring journey to conquer more digits of π and make it a little bit more enjoyable while you are at it. 
+Good Luck 
 
 __BasicFunctions__
 Accept input and check it against π .

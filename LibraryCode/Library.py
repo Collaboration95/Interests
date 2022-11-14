@@ -17,6 +17,7 @@ FinalTargetString = "https://mylibrary.sutd.edu.sg/reservation/add/user/"
 ExecutablePath = "/Users/speedpowermac/Documents/projects/CODE_MAIN/chromedriver" 
 Options = {1:"Make a Slot Booking",2:"Try AnotherMethod", 3:"exit"}
 
+
 def LoadDefault()->None:
     # Loads the default user info into a dict
     Temp_Dict = {}
@@ -223,7 +224,6 @@ def CheckTimeConstraints(UnixTime:float):
 
 # Another Method
 
-
 def AnotherMethod():
     TargetWebsiteUrl = "https://mylibrary.sutd.edu.sg/"
     # TargetWebsiteUrl1 = "https://mylibrary.sutd.edu.sg/availability/232/2022-01-20"
@@ -233,14 +233,18 @@ def AnotherMethod():
     Date = input("Enter Date in yyyy-mm-dd")
 
     driver1= webdriver.Chrome(executable_path=ExecutablePath)
-    driver1.get(TargetWebsiteUrl +"availability/"+str(SeatNo)+"/"+str(Date))
+    
+    driver1.get(TargetWebsiteUrl+"availability/"+"262/"+"2022-01-24")
 
-    # GettingBookedTimeSlots
-    BookedTimeSlots = driver1.find_elements_by_class_name("book-time-columns book-time-unavailable")
-    # BookedTimeSlots = driver1.find_elements(By.CLASS_NAME,"book-time-columns book-time-unavailable")
-    # [print(x.text) for x in BookedTimeSlots]
-    print(len(BookedTimeSlots))
+    elems = driver1.find_elements(By.XPATH,"//a[@href]")
+    elems = [x.get_attribute("href") for x in elems]
+    temp = elems.copy()
 
+    temp = [ int(x[55:]) for x in temp if(x[0:50]=="https://mylibrary.sutd.edu.sg/reservation/add/user")]
 
+    for x in temp:
+        temp_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(x))
+        print(temp_time)
+    
 DefaultMainFunction()
- 
+    
