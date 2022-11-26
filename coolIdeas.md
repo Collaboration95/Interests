@@ -20,5 +20,9 @@
 > Want to Find the Shortest path between two topic pages on wikipedia , use the dataset from WikiPedia Link Tree Project and train 
 > an Ml model and try to beat it ! 
 
+### <insert Catchy name>
+> Are you a person who avoids confrontation , and feel that your friend(s) is/are drifting apart ? 
+> use the scrapper the to scrape and analyse metrics 
+
 
 ~~If you find any of these ideas interesting and want to collaborate , feel free to contact me ~~
